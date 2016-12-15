@@ -241,6 +241,11 @@ NYC.prototype.walkAllFiles = function (dir, visitor) {
 
 NYC.prototype._maybeInstrumentSource = function (code, filename, relFile) {
   var instrument = this.exclude.shouldInstrument(filename, relFile)
+  var mediumIncludePathOverrides = this.config.mediumIncludePathOverrides || []
+  instrument = instrument || mediumIncludePathOverrides.some(function (path) {
+    return filename.indexOf(path) >= 0
+  })
+
   if (!instrument) {
     return null
   }
